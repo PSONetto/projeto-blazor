@@ -1,0 +1,530 @@
+﻿@page "/lists"
+
+@code {
+    public class Pais
+    {
+        public string Nome { get; }
+        public string Capital { get; }
+
+        public Pais(string nome, string capital)
+        {
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new Exception("País inválido");
+
+            if (string.IsNullOrWhiteSpace(capital))
+                throw new Exception("Capital inválida");
+
+            Nome = nome;
+            Capital = capital;
+        }
+    }
+
+    public static string[] paises = { "Brasil", "Argentina", "Chile" };
+
+    List<Pais> paisesEuropa = new List<Pais>();
+    protected async override Task OnInitializedAsync()
+    {
+        paisesEuropa.Add(new Pais("Portugal", "Lisboa"));
+        paisesEuropa.Add(new Pais("Espanha", "Madrid"));
+        paisesEuropa.Add(new Pais("França", "París"));
+        paisesEuropa.Add(new Pais("Itália", "Roma"));
+    }
+
+    List<string> paisesList = new List<string>(paises);
+}
+
+<PageTitle>Listas e Tabelas</PageTitle>
+
+<h1>Listas e Tabelas</h1>
+
+<div class="card mb-3" id="list">
+    <div class="card-body">
+        <h2>List&lt;T&gt;</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            A classe List&lt;T&gt; é uma coleção de objetos fortemente tipados acessados por índice
+            como um <i>Array</i>, tendo métodos de busca, organização e modificação da lista genérica.
+        </p>
+        <p>
+            Uma lista List&lt;T&gt; pode possuir tipos genéricos como &lt;string&gt; ou
+            classes como &lt;Livro&gt;.
+        </p>
+        <p>
+            <i>List</i> é uma classe genérica e está definida no <i>namespace</i>
+            <i>System.Collections.Generic</i>.<br />
+            É preciso importar este <i>namespace</i> para acessar a classe List&lt;T&gt;.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            using System.Collections.Generic;
+        </blockquote>
+        <p>
+            Declarando uma lista:
+        </p>
+        <blockquote class="border p-2 bg-light">
+            List&lt;string&gt; lista = new List&lt;string&gt;(&nbsp;);<br /><br />
+
+            string[&nbsp;] paises = { "Brasil", "Argentina", "Chile" };<br />
+            List&lt;string&gt; paisesList = new List&lt;string&gt;(paises);
+        </blockquote>
+        <p>
+            Para adicionar um item a lista deve-se utilizar o método <i>Add</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            paises.Add("Uruguai");<br />
+            paises.Add("Paraguai");
+        </blockquote>
+        <p>
+            Para remover um item da lista deve-se utilizar o método <i>Remove</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            paises.Remove("Argentina");<br /><br />
+            <i>ou</i><br /><br />
+            paises.Remove(2);<br />
+            <i>Para remover o segundo item da lista.</i>
+        </blockquote>
+        <p>
+            Para adicionar ou remover mais de um item da lista deve-se utilizar os métodos
+            <i>AddRange</i> e <i>RemoveRange</i> respectivamente.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            string[&nbsp;] strPaises = { "Equador", "Bolivia", "Peru" };<br />
+            paises.AddRange("strPaises");<br /><br />
+
+            paises.RemoveRange(2, 2);<br />
+            <i>Remove dois países a partir do segundo item da lista.</i><br />
+            <i>Países removidos neste caso, considerando a lista atual: "Argentina" e "Chile".</i>
+        </blockquote>
+        <p>
+            Para limpar os itens uma lista deve-se utilizar o método <i>Clear</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            paises.Clear();
+        </blockquote>
+        <p>
+            O método <i>Sort</i> de List&lt;T&gt; organiza os items da lista usando o algorítimo
+            <i>
+                <a href="https://www.ime.usp.br/~pf/analise_de_algoritmos/aulas/quick.html"
+                   target="_blank">
+                    QuickSort
+                    <span class="oi oi-external-link ms-1" />
+                </a>
+            </i>
+            .
+        </p>
+        <blockquote class="border p-2 bg-light">
+            paises.Sort();
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="for">
+    <div class="card-body">
+        <h2>@@for</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            A declaração <i>for</i> é utilizada para criar um laço de repetição com quantidade de iterações definidas.
+        </p>
+        <p>
+            Utilizando o @@for para criar uma lista não ordenada, considerando-se uma lista <i>países</i>:<br />
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;ul&gt;<br />
+            &emsp;@@{<br />
+            &emsp;&emsp;string[&nbsp] paises = { "Brasil", "Argentina", "Chile" };<br /><br />
+
+            &emsp;&emsp;List&lt;string&gt; paisesList = new List&lt;string&gt;(paises);<br /><br />
+
+            &emsp;&emsp;for (var i = 0; i &lt; 3; i++)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;&lt;li&gt;@@paisesList[i]&lt;/li&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            &lt;/ul&gt;
+        </blockquote>
+
+        <p>Resultado:</p>
+        <div>
+            <ul>
+                @{
+                    for (var i = 0; i < 3; i++)
+                    {
+                        <li>@paisesList[i]</li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3" id="foreach">
+    <div class="card-body">
+        <h2>@@foreach</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            A declaração @@foreach é utilizada para criar um laço de repetição que itera cada elemento de uma
+            lista.
+        </p>
+        <p>
+            Utilizando o @@foreach para criar uma lista não ordenada, considerando-se uma lista <i>países</i>:<br />
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;ul&gt;<br />
+            &emsp;@@{<br />
+            &emsp;&emsp;string[&nbsp] paises = { "Brasil", "Argentina", "Chile" };<br /><br />
+
+            &emsp;&emsp;List&lt;string&gt; paisesList = new List&lt;string&gt;(paises);<br /><br />
+
+            &emsp;&emsp;foreach (var element in listPaises)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&emsp;&lt;li&gt;@@element&lt;/li&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;}<br />
+            &lt;/ul&gt;
+        </blockquote>
+
+        <p>Resultado:</p>
+        <div>
+            <ul>
+                @{
+                    foreach (var element in paisesList)
+                    {
+                        <li>@element</li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3" id="nao-ordenada">
+    <div class="card-body">
+        <h2>Lista não ordenada</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Um lista não ordenada, unordered list (ul), não possui uma ordem definida e é marcada por
+            <i>bullets</i> por padrão.
+        </p>
+        <p>
+            Exemplo:
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;ul&gt;<br />
+            &emsp;&lt;li&gt;Portugal&lt;/li&gt;<br />
+            &emsp;&lt;li&gt;Espanha&lt;/li&gt;<br />
+            &emsp;&lt;li&gt;França&lt;/li&gt;<br />
+            &lt;/ul&gt;
+        </blockquote>
+        <p>
+            Resultado:
+        </p>
+        <ul>
+            <li>Portugal</li>
+            <li>Espanha</li>
+            <li>França</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card mb-3" id="ordenada">
+    <div class="card-body">
+        <h2>Lista ordenada</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Um lista ordenada, ordered list (ol), possui uma ordem definida e é marcada por
+            <i>números</i> por padrão.
+        </p>
+        <p>
+            Exemplo:
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;ol&gt;<br />
+            &emsp;&lt;li&gt;Janeiro&lt;/li&gt;<br />
+            &emsp;&lt;li&gt;Fevereiro&lt;/li&gt;<br />
+            &emsp;&lt;li&gt;Março&lt;/li&gt;<br />
+            &lt;/ol&gt;
+        </blockquote>
+        <p>
+            Resultado:
+        </p>
+        <ol>
+            <li>Janeiro</li>
+            <li>Fevereiro</li>
+            <li>Março</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card mb-3" id="tabela">
+    <div class="card-body">
+        <h2>Tabela</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Tabelas consistem em células dentro de linhas e colunas.
+        </p>
+        <p>
+            Uma tabela é dividade em <i>thead</i>, o cabeçalho, <i>tbody</i>, o corpo da tabela e <i>tfoot</i>,
+            o rodapé. A tabela possui linhas, <i>table row (tr)</i> e células, <i>table data (td)</i>, além de
+            células de cabeçalho, <i>table header (th)</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;table&gt;<br />
+            &emsp;&lt;thead&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;País&lt;/th&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;Capital&lt;/th&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/thead&gt;<br />
+            &emsp;&lt;tbody&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Portugal&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Lisboa&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Espanha&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Madrid&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;França&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;París&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Itália&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;Roma&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/tbody&gt;<br />
+            &lt;/table&gt;
+        </blockquote>
+        <p>
+            Resultado:
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>País</th>
+                    <th>Capital</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Portugal</td>
+                    <td>Lisboa</td>
+                </tr>
+                <tr>
+                    <td>Espanha</td>
+                    <td>Madrid</td>
+                </tr>
+                <tr>
+                    <td>França</td>
+                    <td>París</td>
+                </tr>
+                <tr>
+                    <td>Itália</td>
+                    <td>Roma</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p class="mt-3">
+            Utilizando List&lt;T&gt; e @@foreach para montar uma tabela utilizando uma lista de países paisesEuropa:
+        </p>
+
+        <blockquote class="border p-2 bg-light">
+            &lt;table&gt;<br />
+            &emsp;&lt;thead&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;País&lt;/th&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;Capital&lt;/th&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/thead&gt;<br />
+            &emsp;&lt;tbody&gt;<br />
+            &emsp;&emsp;@@foreach (var element in paisesEuropa)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Nome&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Capital&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&lt;/tbody&gt;<br />
+            &lt;/table&gt;
+        </blockquote>
+
+        <p>Resultado:</p>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>País</th>
+                        <th>Capital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var element in paisesEuropa)
+                    {
+                        <tr>
+                            <td>@element.Nome</td>
+                            <td>@element.Capital</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-3" id="linq">
+    <div class="card-body">
+        <h2>LINQ</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Uma consulta é uma expressão que recupera dados de uma fonte de dados.
+            O LINQ simplifica essa situação ao oferecer um modelo consistente para
+            trabalhar com os dados em vários tipos de fontes e formatos de dados.
+        </p>
+        <p>
+            As operações de consulta LINQ consistem em três ações distintas:
+        </p>
+        <ol>
+            <li>Obter a fonte de dados.</li>
+            <li>Criar a consulta.</li>
+            <li>Executar a consulta.</li>
+        </ol>
+
+        <p>
+            Em uma consulta LINQ, a cláusula <i>from</i> vem primeiro para introduzir a
+            fonte de dados e a variável de intervalo.
+        </p>
+
+        @{
+            var queryPaises = from paises in paisesEuropa select paises;
+        }
+
+        <blockquote class="border p-2 bg-light">
+            var queryPaises = from paises in paisesEuropa select paises;<br /><br />
+            &lt;table&gt;<br />
+            &emsp;&lt;thead&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;País&lt;/th&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;Capital&lt;/th&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/thead&gt;<br />
+            &emsp;&lt;tbody&gt;<br />
+            &emsp;&emsp;@@foreach (var element in queryPaises)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Nome&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Capital&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&lt;/tbody&gt;<br />
+            &lt;/table&gt;
+        </blockquote>
+
+        <p>Resultado:</p>
+        <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>País</th>
+                        <th>Capital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var element in queryPaises)
+                    {
+                        <tr>
+                            <td>@element.Nome</td>
+                            <td>@element.Capital</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <p>O filtro <i>where</i> retorna apenas os valores que correspondem às condições de validação:</p>
+
+        @{
+            var queryPaises2 = from paises in paisesEuropa
+                               where paises.Nome == "Portugal"
+                               select paises;
+        }
+
+        <blockquote class="border p-2 bg-light">
+            var queryPaises = from paises in paisesEuropa select paises where paises.Nome == "Portugal"
+            select paises;<br /><br />
+            &lt;table&gt;<br />
+            &emsp;&lt;thead&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;País&lt;/th&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;Capital&lt;/th&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/thead&gt;<br />
+            &emsp;&lt;tbody&gt;<br />
+            &emsp;&emsp;@@foreach (var element in queryPaises)<br />
+            &emsp;&emsp;{<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Nome&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@element.Capital&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&lt;/tbody&gt;<br />
+            &lt;/table&gt;
+        </blockquote>
+
+        <p>Resultado:</p>
+        <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>País</th>
+                        <th>Capital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var element in queryPaises2)
+                    {
+                        <tr>
+                            <td>@element.Nome</td>
+                            <td>@element.Capital</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <p>O método First retorna o primeiro elemento.</p>
+
+        <blockquote class="border p-2 bg-light">
+            Pais first = paisesEuropa.First(&nbsp);<br /><br />
+            &lt;table&gt;<br />
+            &emsp;&lt;thead&gt;<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;País&lt;/th&gt;<br />
+            &emsp;&emsp;&emsp;&lt;th&gt;Capital&lt;/th&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&lt;/thead&gt;<br />
+            &emsp;&lt;tbody&gt;<br />
+            &emsp;&emsp;@@{<br />
+            &emsp;&emsp;&lt;tr&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@first.Nome&lt;/td&gt;<br />
+            &emsp;&emsp;&emsp;&lt;td&gt;@@first.Capital&lt;/td&gt;<br />
+            &emsp;&emsp;&lt;/tr&gt;<br />
+            &emsp;&emsp;}<br />
+            &emsp;&lt;/tbody&gt;<br />
+            &lt;/table&gt;
+        </blockquote>
+
+        <p>Resultado: </p>
+        <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>País</th>
+                        <th>Capital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        Pais first = paisesEuropa.First();
+                        <tr>
+                            <td>@first.Nome</td>
+                            <td>@first.Capital</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

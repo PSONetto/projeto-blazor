@@ -1,0 +1,122 @@
+﻿@page "/crud"
+@inject HttpClient Http
+
+<PageTitle>CRUD</PageTitle>
+
+<h1>CRUD</h1>
+
+<div class="card mb-3" id="listar">
+    <div class="card-body">
+        <h2>Listar Objetos</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Para listar os objetos vindos do banco de dados é necessário usar o método <i>Get</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            List&lt;Categoria&gt; Categorias = new List&lt;Categoria&gt;(&nbsp;);<br /><br />
+
+            protected override async Task OnInitializedAsync(&nbsp;)<br />
+            {<br />
+            &emsp;Categorias = await repositorio.Get(&nbsp;);<br />
+            }
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="deletar">
+    <div class="card-body">
+        <h2>Deletar Objetos</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Para deletar um objeto vindo do banco de dados é necessário usar o método <i>Delete</i>, especificando o
+            index do elemento a ser apagado.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            private async Task DeletarItem(int Id)<br />
+            {<br />
+            &emsp;await repositorio.Delete(Id);<br /><br />
+
+            &emsp;<i>Refetch para atualizar a lista após apagar o item.</i><br />
+            &emsp;Categorias = await repositorio.Get(&emsp;);<br />
+            }
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="cadastrar">
+    <div class="card-body">
+        <h2>Cadastrar Objetos</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Para cadastrar um objeto no banco de dados é necessário usar o método <i>Add</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            private Categoria categoria = new Categoria(&nbsp;);<br /><br />
+
+            private async Task Create(&nbsp;)<br />
+            {<br />
+            &emsp;await repository.Add(categoria);<br />
+            }
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="editar">
+    <div class="card-body">
+        <h2>Editar Objetos</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Para editar um objeto no banco de dados é necessário usar o método <i>Update</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            private async Task Edit(&nbsp;)<br />
+            {<br />
+            &emsp;await repository.Update(categoria);<br />
+            }
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="formulario">
+    <div class="card-body">
+        <h2>Formulário</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            Um formulário contem campos para preenchimento que serão utilizados como parâmetro para ações no repositório.
+        </p>
+        <p>
+            Um campo de um formulário contém um <i>label</i>, para nomear o campo, e um <i>input</i>, que conterá o valor
+            a ser submetido. Existem diversos tipos de input, como <i>text</i>, <i>select menu</i>, <i>radio</i> e
+            <i>checkbox</i>.
+        </p>
+        <blockquote class="border p-2 bg-light">
+            &lt;div class="form-group"&gt;<br />
+            &emsp;&lt;label&gt;Nome:&lt;/label&gt;<br />
+            &emsp;&lt;div&gt;<br />
+            &emsp;&emsp;&lt;InputText class="form-control" @@bind-Value="@@Categoria.Nome" /&gt;<br />
+            &emsp;&emsp;&lt;ValidationMessage For="((&nbsp;) =&gt; Categoria.Nome)" /&gt;<br />
+            &emsp;&lt;/div&gt;<br />
+            &lt;/div&gt;<br /><br />
+
+            &lt;button&gt; class="btn btn-success" type="submit"&gt;Salvar&lt;/button&gt;<br /><br />
+
+
+            @@code {<br />
+            &emsp;[Parameter] public Categoria Categoria { get; set; }<br />
+            &emsp;[Parameter] public EventCallback OnValidSubmit { get; set; }<br />
+            }
+        </blockquote>
+    </div>
+</div>
+
+<div class="card mb-3" id="dependencias">
+    <div class="card-body">
+        <h2>Injeção de Dependências</h2>
+        <p class="col-md-12 fs-5 border-bottom m-2">
+            DI (injeção de dependência), que é uma técnica para conseguir IoC (inversão de controle) 
+            entre classes e suas dependências. Uma dependência é um objeto do qual outro objeto depende.
+        </p>
+
+        <blockquote class="border p-2 bg-light">
+            services.AddScoped&lt;IHttpService, HttpService&gt;(&nbsp;);<br /><br />
+
+            services.AddTransient&lt;IRepository&lt;Categoria&gt;, CategoriaRepository&gt;(&nbsp;);<br />
+            services.AddTransient&lt;IRepository&lt;Produto&gt;, ProdutoRepository&gt;(&nbsp;);<br />
+        </blockquote>
+    </div>
+</div>
